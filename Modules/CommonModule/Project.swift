@@ -12,7 +12,7 @@ let project = Project(
             platform: .iOS,
             product: .framework,
             bundleId: "com.agora.chat.CommonModule",
-            infoPlist: .default,
+            deploymentTarget: .iOS(targetVersion: "13.0", devices: .iphone), infoPlist: .default,
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
