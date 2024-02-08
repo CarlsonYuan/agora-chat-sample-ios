@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .systemBackground
         window?.rootViewController = createLoginViewController()
         window?.makeKeyAndVisible()
+        
+        self.registerForPushNotifications()
+        
         return true
     }
     
@@ -39,5 +42,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ], animated: false)
         tabBarController.modalPresentationStyle = .fullScreen
         window?.rootViewController?.present(tabBarController, animated: true)
+    }
+    
+    private func registerForPushNotifications() {
+      UNUserNotificationCenter.current()
+        .requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, _ in
+            guard granted else { return }
+            self?.getNotificationSettings()
+        }
+    }
+    
+    private func getNotificationSettings() {
+      UNUserNotificationCenter.current().getNotificationSettings { settings in
+          guard settings.authorizationStatus == .authorized else { return }          
+      }
     }
 }
