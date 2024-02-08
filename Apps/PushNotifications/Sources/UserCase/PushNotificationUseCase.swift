@@ -7,6 +7,16 @@
 //
 
 import Foundation
+import AgoraChat
+
 class PushNotificationUseCase {
-    
+    func registerPushToken(deviceToken: Data) {
+        AgoraChatClient.shared().registerForRemoteNotifications(withDeviceToken: deviceToken) { error in
+            if let error = error {
+                print("APNS registration failed. \(error.debugDescription)")
+                return
+            }
+            print("APNS Token is registered.")
+        }
+    }
 }

@@ -54,7 +54,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func getNotificationSettings() {
       UNUserNotificationCenter.current().getNotificationSettings { settings in
-          guard settings.authorizationStatus == .authorized else { return }          
+          guard settings.authorizationStatus == .authorized else { return }
+          DispatchQueue.main.async {
+              // register for Remote Notifications:
+            UIApplication.shared.registerForRemoteNotifications()
+          }
       }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // register a device token to the Agora Chat server
+        PushNotificationUseCase().registerPushToken(deviceToken: deviceToken)
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 }
