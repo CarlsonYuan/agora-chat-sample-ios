@@ -16,9 +16,10 @@ public class EnvironmentUseCase {
             }
         }
     }
-    public static func initializeAgoraChatSDK(appKey: AppKey) {
+    public static func initializeAgoraChatSDK(appKey: AppKey, apnsCertName: String? = nil) {
         let options = AgoraChatOptions(appkey: appKey.rawValue)
         options.enableConsoleLog = true
+        options.apnsCertName = apnsCertName
         AgoraChatClient.shared().initializeSDK(with: options)
     }
     
