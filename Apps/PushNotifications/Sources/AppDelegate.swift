@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-        EnvironmentUseCase.initializeAgoraChatSDK(appKey: .sample)
+        EnvironmentUseCase.initializeAgoraChatSDK(appKey: .sample, apnsCertName: "dev_push_notification_chat")
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = .systemBackground
         window?.rootViewController = createLoginViewController()
@@ -65,8 +65,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         // register a device token to the Agora Chat server
         PushNotificationUseCase().registerPushToken(deviceToken: deviceToken)
+        
+        let tokenString = hexadecimalString(fromData: deviceToken)
+        print("Device Token: \(tokenString)")
     }
-    
+    func hexadecimalString(fromData data: Data) -> String {
+        let hexString = data.map { String(format: "%02.2hhx", $0) }.joined()
+        return hexString
+    }
+
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
