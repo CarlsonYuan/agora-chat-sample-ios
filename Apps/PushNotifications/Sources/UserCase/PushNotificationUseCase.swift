@@ -20,3 +20,12 @@ class PushNotificationUseCase {
         }
     }
 }
+
+extension AppDelegate {
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        AgoraChatClient.shared().applicationDidEnterBackground(application)
+    }
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        AgoraChatClient.shared().applicationWillEnterForeground(application)
+    }
+}
