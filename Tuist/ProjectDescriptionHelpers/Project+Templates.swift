@@ -36,7 +36,7 @@ extension Project {
             name: name,
             platform: platform,
             product: .app,
-            bundleId: "com.agora.chat.\(name)",
+            bundleId: "carlson.agora.chat.\(name)",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: .iphone),
             infoPlist: .extendingDefault(with: infoPlist),
             sources: [.glob(.relativeToManifest("Sources/**"))],
