@@ -25,6 +25,8 @@ public class MessageInputView: UIView {
     
     private lazy var sendFileMessageButton: UIButton = {
         let sendFileMessageButton: UIButton = UIButton()
+        sendFileMessageButton.setImage(CommonModuleAsset.imgBtnSendFileMsgNormal.image, for: .normal)
+        sendFileMessageButton.setImage(CommonModuleAsset.imgBtnSendFileMsgPressed.image, for: .highlighted)
         sendFileMessageButton.addTarget(self, action: #selector(didTouchSendFileMessageButton), for: .touchUpInside)
         return sendFileMessageButton
     }()
@@ -47,7 +49,7 @@ public class MessageInputView: UIView {
     
     private lazy var sendUserMessageButton: UIButton = {
         let sendUserMessageButton: UIButton = UIButton()
-//        sendUserMessageButton.setImage(CommonModuleAsset.imgBtnSendUserMsgPressed.image, for: .normal)
+        sendUserMessageButton.setImage(CommonModuleAsset.imgBtnSendUserMsgPressed.image, for: .normal)
         sendUserMessageButton.addTarget(self, action: #selector(didTouchUserMessageButton), for: .touchUpInside)
         return sendUserMessageButton
     }()
