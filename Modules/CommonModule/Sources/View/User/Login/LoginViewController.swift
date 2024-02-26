@@ -156,7 +156,6 @@ public final class LoginViewController: UIViewController {
             
             switch result {
             case .success(let username):
-                self?.updateUIForConnected()
                 self?.didConnectUser(username)
             case .failure(let error):
                 self?.presentAlert(error: error)
@@ -170,6 +169,7 @@ public final class LoginViewController: UIViewController {
 
     private func updateUIForDefault() {
         userIdTextField.isEnabled = true
+        userTokenTextField.isEnabled = true
         connectButton.isEnabled = true
         connectButton.setTitle("Connect", for: .normal)
     }
@@ -188,7 +188,7 @@ public final class LoginViewController: UIViewController {
         connectButton.setTitle("Connected", for: .normal)
     }
 
-    @IBAction private func didTouchConnectButton(_ sender: UIButton) {
+    @objc private func didTouchConnectButton(_ sender: UIButton) {
         connectUser()
     }
     

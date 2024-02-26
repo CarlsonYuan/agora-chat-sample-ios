@@ -10,15 +10,42 @@ import Foundation
 import AgoraChat
 
 class PushNotificationUseCase {
-    func registerPushToken(deviceToken: Data) {
+    public static let shared = PushNotificationUseCase()
+    
+    func registerDeviceToken(deviceToken: Data) {
         AgoraChatClient.shared().registerForRemoteNotifications(withDeviceToken: deviceToken) { error in
             if let error = error {
-                print("APNS registration failed. \(error.debugDescription)")
+                print("APNS registration failed. \(error.errorDescription ?? "With no error description")")
                 return
             }
             print("APNS Token is registered.")
         }
     }
+    
+    func setPushNotification(enable: Bool) {
+            if enable {
+                let smOption = AgoraChatSilentModeParam(paramType: .remindType)
+                smOption.remindType = .all
+                AgoraChatClient.shared().pushManager?.setSilentModeForAll(smOption, completion: { result, error in
+                    if let error = error {
+                        print("set silent model failed. \(error.errorDescription ?? "With no error description")")
+                        return
+                    }
+                    print("set silent model success.")
+                })
+            }
+            else {
+                let smOption = AgoraChatSilentModeParam(paramType: .remindType)
+                smOption.remindType = .none
+                AgoraChatClient.shared().pushManager?.setSilentModeForAll(smOption, completion: { result, error in
+                    if let error = error {
+                        print("set silent model failed. \(error.errorDescription ?? "With no error description")")
+                        return
+                    }
+                    print("set silent model success.")
+                })
+            }
+        }
 }
 
 extension AppDelegate {

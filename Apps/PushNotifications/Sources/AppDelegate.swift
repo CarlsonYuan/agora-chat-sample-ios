@@ -38,7 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func presentMainViewController() {
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([
-            UINavigationController(rootViewController: GroupListViewController())
+            UINavigationController(rootViewController: GroupListViewController()),
+            UINavigationController(rootViewController: SettingViewController())
         ], animated: false)
         tabBarController.modalPresentationStyle = .fullScreen
         window?.rootViewController?.present(tabBarController, animated: true)
@@ -64,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         // register a device token to the Agora Chat server
-        PushNotificationUseCase().registerPushToken(deviceToken: deviceToken)
+        PushNotificationUseCase.shared.registerDeviceToken(deviceToken: deviceToken)
         
         let tokenString = hexadecimalString(fromData: deviceToken)
         print("Device Token: \(tokenString)")
@@ -81,8 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         let payload = userInfo as NSDictionary
         print("User Info payload:", payload)
-        let alertMsg = (userInfo["aps"] as! NSDictionary)["alert"] as! NSDictionary
-        print("Alert Message:", alertMsg)
+        // let alertMsg = (userInfo["aps"] as! NSDictionary)["alert"] as! NSDictionary
+        // print("Alert Message:", alertMsg)
         // Implement your custom way to parse payload
         if (application.applicationState == .inactive) {
             // Receiving a notification while your app is inactive.

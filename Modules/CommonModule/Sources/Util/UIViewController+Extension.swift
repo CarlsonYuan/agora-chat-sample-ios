@@ -40,7 +40,7 @@ extension UIViewController {
     }
     
     public func presentAlert(error: Error) {
-        presentAlert(title: "Error", message: (error as NSError).domain)
+        presentAlert(title: "Error", message: (error as NSError).debugDescription)
     }
     
 }

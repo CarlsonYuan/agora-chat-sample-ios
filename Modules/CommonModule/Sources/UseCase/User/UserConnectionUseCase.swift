@@ -47,5 +47,11 @@ public class UserConnectionUseCase {
         userId = username
         isAutoLogin = true
     }
-            
+    
+    public func logout(unregisterDeviceToken:Bool, completion: @escaping () -> Void) {
+        AgoraChatClient.shared().logout(unregisterDeviceToken) { [weak self]  err in
+            self?.isAutoLogin = false
+            completion()
+        }
+    }
 }
