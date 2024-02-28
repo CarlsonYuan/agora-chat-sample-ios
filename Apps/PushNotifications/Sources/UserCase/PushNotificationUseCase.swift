@@ -54,5 +54,8 @@ extension AppDelegate {
     }
     func applicationWillEnterForeground(_ application: UIApplication) {
         AgoraChatClient.shared().applicationWillEnterForeground(application)
+        
+        UserDefaults(suiteName: "group.com.carlson.demo")?.set(1, forKey: "count")
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 }
