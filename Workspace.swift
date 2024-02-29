@@ -18,7 +18,8 @@ extension Workspace {
                 "Apps/**",
                 "Modules/**"
             ],
-            schemes: []
+            schemes: [],
+            additionalFiles: ["README.md"]
         )
     }
     
