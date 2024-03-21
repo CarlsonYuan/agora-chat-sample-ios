@@ -149,7 +149,9 @@ extension GroupViewController: UITableViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
+        if scrollView.contentOffset.y - Constant.loadMoreThreshold <= 0 {
+             messageListUseCase.loadPreviousMessages()
+        }
     }
     
 }
