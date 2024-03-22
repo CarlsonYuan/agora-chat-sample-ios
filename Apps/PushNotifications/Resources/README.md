@@ -12,7 +12,34 @@
 - [ ] Content templates
 
 ## Sending push notifications using command-line tools
-
+### Using AgoraChat RESTful API endpoints
+```
+curl -X POST \
+-H 'Authorization: Bearer ${AppToken}' \
+'https://${REST_API}/${OrgName}/${AppName}/messages?useMsgId=true' \
+-d '{
+    "from": "${senderUsername}",
+    "target_type": "users",
+    "target": [
+        "${receiverUsername}",
+        "${receiverUsername}"
+    ],
+    "msg": {
+        "msg": "this is a test message",
+        "type": "txt"
+    },
+    "ext": {
+        "em_apns_ext": {                       // mapping "aps" (Apple-defined key)
+            "em_push_mutable_content": true,   // mapping "mutable-content" (Apple-defined key)
+            "extern": {                        // mapping "e" in the userInfo for remote notifications
+                "media-url": "${url}"          // custom key-value
+            }
+        }
+    }
+}'
+```
+Apple-defined keys table [here](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification#Payload-key-reference)
+### Directly to Apple Push Notification service (APNs)
 Send a Push Notification Using a Certificate
 * With a DER-encoded certificate and the PEM-encoded private key
 1. Set these shell variables:
@@ -59,7 +86,7 @@ For more information see [here](https://developer.apple.com/documentation/userno
 * list the registered tokens 
 ```
 curl -X GET \
--H 'Authorization: Bearer { AppToken }' \
+-H 'Authorization: Bearer ${AppToken}' \
 'https://${REST_API}/${OrgName}/${AppName}/users/${username}/push/binding'
 ```
 
