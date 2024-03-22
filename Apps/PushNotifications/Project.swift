@@ -4,6 +4,8 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let name = "PushNotifications"
+let NSEName = "NotificationServiceExtension" // Notification Service Extension product name
+
 let project = Project(
     name: name,
     organizationName: "Carlson",
@@ -12,10 +14,11 @@ let project = Project(
             name: name,
             platform: .iOS,
             dependencies: [
-                .project(target: "CommonModule", path: .relativeToRoot("Modules/CommonModule"))
+                .project(target: "CommonModule", path: .relativeToRoot("Modules/CommonModule")),
+                .target(name: NSEName)
             ]
         ),
-        makeNotificationServiceExtensionTarget(name: "NotificationServiceExtension", platform: .iOS)
+        makeNotificationServiceExtensionTarget(name: NSEName, platform: .iOS)
     ]
 )
 
@@ -54,9 +57,15 @@ private func makeNotificationServiceExtensionTarget(name: String, platform: Plat
         name: name,
         platform: platform,
         product: .appExtension,
-        bundleId: "carlson.agora.chat.\(name)",
+        bundleId: "carlson.agora.chat.PushNotifications.\(name)",
         deploymentTarget: .iOS(targetVersion: "13.0", devices: .iphone),
-        infoPlist: .file(path: .relativeToManifest("\(name)/Info.plist")),
+        infoPlist: .extendingDefault(with: [
+            "CFBundleDisplayName": "$(PRODUCT_NAME)",
+            "NSExtension": [
+                "NSExtensionPointIdentifier": "com.apple.usernotifications.service",
+                "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).NotificationService"
+            ]
+        ]),
         sources: [.glob(.relativeToManifest("\(name)/**"))],
         entitlements: .file(path: .relativeToManifest("\(name)/\(name).entitlements")),
         settings: .settings(
