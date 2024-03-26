@@ -7,7 +7,7 @@
 * [feat: increment app icon badge count](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/fc0f52a2730d1451efe658121d0dcc8d8d1eff6d)
 - [x] Media attachments
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
-- [ ] Sound
+- [x] Sound
 - [x] Translation
 - [ ] Content templates
 
@@ -31,6 +31,7 @@ curl -X POST \
     "ext": {
         "em_apns_ext": {                       // mapping "aps" (Apple-defined key)
             "em_push_mutable_content": true,   // mapping "mutable-content" (Apple-defined key)
+            "em_push_sound": "sample-3s.wav",  // mapping "sound" (Apple-defined key)
             "extern": {                        // mapping "e" in the userInfo for remote notifications
                 "media-url": "${url}"          // custom key-value
             }
