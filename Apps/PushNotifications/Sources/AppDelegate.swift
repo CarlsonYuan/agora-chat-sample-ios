@@ -30,9 +30,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func createLoginViewController() -> LoginViewController {
-        return LoginViewController(didConnectUser: { [weak self] _ in
+        return LoginViewController(didConnectUser: { [weak self] user in
+            self?.updatePreferredLanguages(for: user)
             self?.presentMainViewController()
         })
+    }
+    
+    private func updatePreferredLanguages(for user: String) {
+        PushNotificationTranslationUseCase().updatePreferredLanguages(for: user) { result in
+            // Handle result
+            print(result)
+        }
     }
     
     private func presentMainViewController() {

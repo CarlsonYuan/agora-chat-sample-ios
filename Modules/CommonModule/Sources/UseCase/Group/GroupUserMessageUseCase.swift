@@ -24,6 +24,7 @@ open class GroupUserMessageUseCase {
     open func sendMessage(_ text: String, completion: @escaping (Result<AgoraChatMessage, Error>) -> Void)  -> AgoraChatMessage? {
         
         let body = AgoraChatTextMessageBody.init(text: text)
+        body.targetLanguages = ["en", "ja"]
         let message = AgoraChatMessage.init(conversationID: group.groupId, body: body, ext: nil)
         message.chatType = .groupChat
         AgoraChatClient.shared().chatManager?.send(message, progress: nil, completion: { message, error in
