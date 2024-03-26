@@ -46,7 +46,8 @@ private func makeAppTarget(name: String, platform: Platform, dependencies: [Targ
             debug: SettingsDictionary().automaticCodeSigning(devTeam: "JC854K845H"),
             release: SettingsDictionary().automaticCodeSigning(devTeam: "JC854K845H"),
             defaultSettings: .recommended
-        )
+        ),
+        additionalFiles: ["README.md"]
     )
     return mainTarget
 }

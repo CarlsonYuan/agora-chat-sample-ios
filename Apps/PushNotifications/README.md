@@ -8,7 +8,7 @@
 - [x] Media attachments
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
 - [ ] Sound
-- [ ] Translation
+- [x] Translation
 - [ ] Content templates
 
 ## Sending push notifications using command-line tools
@@ -101,3 +101,15 @@ curl -X PUT \
     "notifier_name": "${apnsCertName}"
 }'
 ```
+
+## Push notification translation 
+To enable push notification translation functionality, follow these steps:
+
+1. **Enable Translation Service**: 
+   - Translation is not enabled by default. To use this feature, you need to subscribe to the Pro or Enterprise pricing plan and enable it in Agora Console.
+
+2. **Set Preferences**:
+   - [Set user's preferred languages](https://docs.agora.io/en/agora-chat/develop/offline-push?platform=ios#set-up-push-translations)
+
+3. **Add Target Languages**:
+   - When sending messages from the client side that you want to be translated via push notifications, ensure that you [include target languages in your message settings](https://docs.agora.io/en/agora-chat/client-api/messages/translate-messages?platform=ios#automatic-translation).
