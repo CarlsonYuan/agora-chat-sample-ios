@@ -9,7 +9,7 @@
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
 - [x] Sound
 - [x] Translation
-- [ ] Content templates
+- [x] Content templates
 
 ## Sending push notifications using command-line tools
 ### Using AgoraChat RESTful API endpoints
@@ -35,6 +35,15 @@ curl -X POST \
             "extern": {                        // mapping "e" in the userInfo for remote notifications
                 "media-url": "${url}"          // custom key-value
             }
+        },
+        "em_push_template": {
+            "name": "${templateName}",
+            "title_args": [
+                "${arg1}"
+            ],
+            "content_args": [
+                "${arg1}"
+            ]
         }
     }
 }'

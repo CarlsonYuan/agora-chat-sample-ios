@@ -27,6 +27,15 @@ open class GroupUserMessageUseCase {
         body.targetLanguages = ["en", "ja"]
         let message = AgoraChatMessage.init(conversationID: group.groupId, body: body, ext: nil)
         message.chatType = .groupChat
+        var messageExt = [String: Any]()
+        // uncommit to set push template
+//        let emPushTemplate: [String: Any] = [
+//            "name": "tmp1",
+//            "title_args": ["titleArg1"],
+//            "content_args": ["contentArg1"]
+//        ]
+//        messageExt["em_push_template"] = emPushTemplate
+        message.ext = messageExt
         AgoraChatClient.shared().chatManager?.send(message, progress: nil, completion: { message, error in
             if let error = error {
                 let err = NSError(domain: error.errorDescription, code: error.code.rawValue) as Error
