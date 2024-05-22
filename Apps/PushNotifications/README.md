@@ -3,13 +3,47 @@
 ## Features for Push Notification
 - [x] Enable/disable 
 - [x] Increment app icon badge count   
-* [fix: Notification Service Extension will not work after tuist regenerate](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/3a6eda9e48f1ebfefb290ef2b48d06869f6d9290)  
 * [feat: increment app icon badge count](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/fc0f52a2730d1451efe658121d0dcc8d8d1eff6d)
 - [x] Media attachments
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
 - [x] Sound
 - [x] Translation
 - [x] Content templates
+---
+
+## Push notification content display types
+
+| AgoraChatPushDisplayStyle | Preview |
+|----------|----------|
+| AgoraChatPushDisplayStyle.simpleBanner | ![IMG_3369](https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/2fb7fea9-54da-412b-a5cd-b4815c3252e5)|
+| AgoraChatPushDisplayStyle.messageSummary |![IMG_3372 2](https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/1ef5d27c-f3dc-4479-bc1f-704aabc0776e)|
+
+To apply a display style to push notifications, use the method below. Specify the type of the display style with the name as either `AgoraChatPushDisplayStyle.simpleBanner` or `AgoraChatPushDisplayStyle.messageSummary`.
+
+```swift
+AgoraChatClient.shared().pushManager?.update(AgoraChatPushDisplayStyle.messageSummary, completion: { error in
+    guard error == nil else {
+        // Handle error.
+        return
+    }
+
+    // AgoraChatPushDisplayStyle.messageSummary has been successfully set.
+})
+```
+
+---
+## Push notification translation 
+To enable push notification translation functionality, follow these steps:
+
+1. **Enable Translation Service**: 
+   - Translation is not enabled by default. To use this feature, you need to subscribe to the Pro or Enterprise pricing plan and enable it in Agora Console.
+
+2. **Set Preferences**:
+   - [Set user's preferred languages](https://docs.agora.io/en/agora-chat/develop/offline-push?platform=ios#set-up-push-translations)
+
+3. **Add Target Languages**:
+   - When sending messages from the client side that you want to be translated via push notifications, ensure that you [include target languages in your message settings](https://docs.agora.io/en/agora-chat/client-api/messages/translate-messages?platform=ios#automatic-translation).
+
 
 ## Sending push notifications using command-line tools
 ### Using AgoraChat RESTful API endpoints
@@ -111,15 +145,3 @@ curl -X PUT \
     "notifier_name": "${apnsCertName}"
 }'
 ```
-
-## Push notification translation 
-To enable push notification translation functionality, follow these steps:
-
-1. **Enable Translation Service**: 
-   - Translation is not enabled by default. To use this feature, you need to subscribe to the Pro or Enterprise pricing plan and enable it in Agora Console.
-
-2. **Set Preferences**:
-   - [Set user's preferred languages](https://docs.agora.io/en/agora-chat/develop/offline-push?platform=ios#set-up-push-translations)
-
-3. **Add Target Languages**:
-   - When sending messages from the client side that you want to be translated via push notifications, ensure that you [include target languages in your message settings](https://docs.agora.io/en/agora-chat/client-api/messages/translate-messages?platform=ios#automatic-translation).
