@@ -9,16 +9,7 @@ import UIKit
 import CommonModule
 import AgoraChat
 
-final class GroupListViewController: UIViewController {
-    
-    private lazy var tableView: UITableView = {
-        let tableView: UITableView = UITableView(frame: .zero, style: .plain)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(GroupListCell.self)
-        return tableView
-    }()
-    
+final class GroupListViewController: UITableViewController {
     
     private lazy var useCase: GroupListUseCase = {
         let useCase = GroupListUseCase()
@@ -26,43 +17,22 @@ final class GroupListViewController: UIViewController {
         return useCase
     }()
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        title = "GroupList"
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-                
+        self.navigationItem.title = "Joined Groups"
         useCase.reloadGroups()
-                
     }
 }
 
 // MARK: - UITableViewDataSource
 
-extension GroupListViewController: UITableViewDataSource {
+extension GroupListViewController {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         useCase.groups.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: GroupListCell = tableView.dequeueReusableCell(for: indexPath)
         let group = useCase.groups[indexPath.row]
         cell.configure(with: group)
@@ -73,18 +43,17 @@ extension GroupListViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension GroupListViewController: UITableViewDelegate {
+extension GroupListViewController {
     
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let group = useCase.groups[indexPath.row]
         let groupViewController = GroupViewController(group: group)
         groupViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(groupViewController, animated: true)
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) {
             useCase.loadNextPage()
         }

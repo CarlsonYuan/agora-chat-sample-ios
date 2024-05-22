@@ -8,78 +8,115 @@
 
 import UIKit
 import CommonModule
+import AgoraChat
 
-public final class SettingViewController: UIViewController {
+extension SettingViewController
+{
+    fileprivate enum Section: Int, CaseIterable
+    {
+        case pushNotification
+        case display
+    }
     
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 16.0
-        return stackView
-    }()
-     
-    private lazy var pushSwitchView: UIView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 16.0
-        
-        let switchButton = UISwitch()
-        switchButton.translatesAutoresizingMaskIntoConstraints = false
-        switchButton.addTarget(self, action: #selector(switchControlValueChanged(_:)), for: .valueChanged)
-        
-        let switchLabel = UILabel()
-        switchLabel.translatesAutoresizingMaskIntoConstraints = false
-        switchLabel.text = "Push Notifications"
-        
-        stackView.addArrangedSubview(switchLabel)
-        stackView.addArrangedSubview(switchButton)
-        return stackView
-    }()
+    fileprivate enum PushNotificationRow: Int, CaseIterable
+    {
+        case pushNotificationType
+    }
     
-    private lazy var logoutButton: UIButton = {
-        let logoutButton = UIButton(frame: .zero)
-        logoutButton.addTarget(self, action: #selector(didTouchLogoutButton(_:)), for: .touchUpInside)
-        logoutButton.setTitle("Logout", for: .normal)
-        logoutButton.setTitleColor(.systemRed, for: .normal)
-        return logoutButton
-    }()
+    fileprivate enum PushDisplayRow: Int, CaseIterable
+    {
+        case showMessageContent
+        case changeContentTemplate
+    }
+}
+class SettingViewController: UITableViewController
+{
+    
+    @IBOutlet private var showMessageContentSwitch: UISwitch!
     
     private let usecase = PushNotificationUseCase.shared
+    private let pushTemplateUsecase = PushNotificationContentTemplateUseCase.shared
     
-    public init() {
-        super.init(nibName: nil, bundle: nil)
-        title = "Setting"
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func viewDidLoad() {
+    public override func viewDidLoad()
+    {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-        ])
-        
-        stackView.addArrangedSubview(logoutButton)
-        stackView.addArrangedSubview(pushSwitchView)
+        self.navigationItem.title = "Settings"
     }
     
-    @objc private func switchControlValueChanged(_ sender: UISwitch) {
-        usecase.setPushNotification(enable: sender.isOn)
+}
+
+private extension SettingViewController
+{
+    @IBAction func toggleIsShowMessageContentEnabled(_ sender: UISwitch)
+    {
+        pushTemplateUsecase.setPushNotificationDisplayStyle(style: sender.isOn ? .messageSummary : .simpleBanner)
     }
     
-    @objc private func didTouchLogoutButton(_ sender: UIButton) {
+    func changeContentTemplate() {
+        pushTemplateUsecase.getPushNotificationContentTemplate { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let templateName):
+                    self.presentTextFieldAlert(title: "Change Template", message: "Please input the name of push template", defaultTextFieldMessage: templateName) { temp in
+                        PushNotificationContentTemplateUseCase.shared.setPushNotificationContentTemplate(temp: temp)
+                    }
+                case .failure( _): break
+                }
+            }
+        }
+    }
+    
+    func changePushNotificationType() {
+        let actionSheet = UIAlertController(title: "Choose type for push notification", message: nil, preferredStyle: .actionSheet)
+        
+        let actionTypes: [(title: String, style: UIAlertAction.Style, type: AgoraChatPushRemindType)] = [
+            ("All Messages", .default, .all),
+            ("Mention Only", .default, .mentionOnly),
+            ("None", .destructive, .none)
+        ]
+        
+        for (title, style, type) in actionTypes {
+            let action = UIAlertAction(title: title, style: style) { [weak self] _ in
+                self?.usecase.setPushNotificationType(type: type)
+            }
+            actionSheet.addAction(action)
+        }
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(actionSheet, animated: true)
+    }
+    
+    @IBAction func SignOut(_ sender: UIButton)
+    {
         UserConnectionUseCase.shared.logout(unregisterDeviceToken: true) { [weak self] in
             self?.dismiss(animated: true)
         }
     }
     
+}
+
+extension SettingViewController
+{
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        let section = Section.allCases[indexPath.section]
+        switch section
+        {
+        case .pushNotification :
+            let row = PushNotificationRow.allCases[indexPath.row]
+            switch row
+            {
+            case .pushNotificationType: self.changePushNotificationType()
+            }
+        case .display:
+            let row = PushDisplayRow.allCases[indexPath.row]
+            switch row
+            {
+            case .showMessageContent: break
+            case .changeContentTemplate: self.changeContentTemplate()
+            }
+
+        }
+    }
 }

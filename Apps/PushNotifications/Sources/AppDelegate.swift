@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         EnvironmentUseCase.initializeAgoraChatSDK(appKey: .sample, apnsCertName: "dev_push_notification_chat")
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = .systemBackground
+        window?.backgroundColor = .samplesPrimary
         window?.rootViewController = createLoginViewController()
         window?.makeKeyAndVisible()
         
@@ -44,13 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func presentMainViewController() {
-        let tabBarController = UITabBarController()
-        tabBarController.setViewControllers([
-            UINavigationController(rootViewController: GroupListViewController()),
-            UINavigationController(rootViewController: SettingViewController())
-        ], animated: false)
-        tabBarController.modalPresentationStyle = .fullScreen
-        window?.rootViewController?.present(tabBarController, animated: true)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let tabBarController = storyboard.instantiateInitialViewController() {
+            window?.rootViewController?.present(tabBarController, animated: true)
+        } else {
+            print("Unable to instantiate initial view controller from storyboard.")
+        }
     }
     
     private func registerForPushNotifications() {

@@ -28,9 +28,10 @@ public final class LoginViewController: UIViewController {
         userIdTextField.placeholder = "USER ID"
         userIdTextField.text = "demo_user_1"
         userIdTextField.font = .systemFont(ofSize: 24)
-        userIdTextField.textColor = .label
+        userIdTextField.textColor = .black
         userIdTextField.tintColor = .systemBlue
         userIdTextField.borderStyle = .roundedRect
+        userIdTextField.backgroundColor = .white
         return userIdTextField
     }()
     
@@ -46,9 +47,10 @@ public final class LoginViewController: UIViewController {
         userIdTextField.placeholder = "USER TOKEN"
         userIdTextField.text = "007eJxTYOAT0itJXrEn5Wi/XL3FIs2HdU+2zTNs6Yp4cnH2UvN3Z20VGFKSjVOSzVMTDcxSLEwsTJMtk43MUs2TElMMTCzMk4xNbsrvSm0IZGTYURTCyMjAysAIhCC+CkOiqUGKWZqhga65ZVqirqFhaqqupYWloa65eXKSUZppUlpaWhIAy9ApEA=="
         userIdTextField.font = .systemFont(ofSize: 24)
-        userIdTextField.textColor = .label
+        userIdTextField.textColor = .black
         userIdTextField.tintColor = .systemBlue
         userIdTextField.borderStyle = .roundedRect
+        userIdTextField.backgroundColor = .white
         return userIdTextField
     }()
 
