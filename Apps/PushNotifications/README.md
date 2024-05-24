@@ -8,10 +8,11 @@
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
 - [x] Sound
 - [x] Translation
-- [x] Content templates
+- [x] Change push notification content display
 ---
 
-## Push notification content display types
+## Change Push Notification Content Display
+### Push notification content display type
 
 | AgoraChatPushDisplayStyle | Preview |
 |----------|----------|
@@ -31,7 +32,17 @@ AgoraChatClient.shared().pushManager?.update(AgoraChatPushDisplayStyle.messageSu
 })
 ```
 
+### Push template
+
+The push notification content display can be customized at the application level using the [push template](https://docs.agora.io/en/agora-chat/develop/offline-push?platform=ios#set-up-push-templates) by specifying the template name as `default` , as shown below.
+> Note: Once set to default, AgoraChatPushDisplayStyle will become unavailable.
+
+| Template Setting  | Preview |
+|----------|----------|
+|  <img width="432" alt="image" src="https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/5f9a7641-99f2-4b78-ba59-8a76b4632e25">   | ![Screenshot 2024-05-24 at 14 15 04](https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/0d98b6ae-bea7-46d8-94e6-f183f3b8e809) |
+
 ---
+
 ## Push notification translation 
 To enable push notification translation functionality, follow these steps:
 
