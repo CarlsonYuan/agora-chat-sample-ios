@@ -4,11 +4,69 @@
 - [x] Enable/disable 
 - [x] Increment app icon badge count   
 * [feat: increment app icon badge count](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/fc0f52a2730d1451efe658121d0dcc8d8d1eff6d)
-- [x] Media attachments
+- [x] Show An Image
 * [feat: push notifications with media attachment](https://github.com/CarlsonYuan/agora-chat-sample-ios/commit/ef38a712a37e36145a887188424923e5f2bfd049)
 - [x] Sound
 - [x] Translation
 - [x] Change push notification content display
+---
+
+## Show An Image
+![Screenshot 2024-05-29 at 11 16 37](https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/c3240cb5-6124-4a0c-b4ee-e34e4fc3c6e3)
+
+
+Step-by-step guide:
+1. Add the code [here](https://github.com/CarlsonYuan/agora-chat-sample-ios/assets/123744402/396b482d-bb25-4d5b-8a5d-5eb2d3116aa0) to Notification Service Extension  
+2. Send a text message with the rich push attachment
+   1. With [the RESTful API](#using-agorachat-restful-api-endpoints)  
+
+      Post request body example:
+      ```json
+      {
+        "from": "demo_user_3",
+        "target_type": "users",
+        "target": [
+            "demo_user_1"
+        ],
+        "msg": {
+            "msg": "Hello, how are you?",
+            "type": "txt"
+        },
+        "ext": {
+            "em_apns_ext": {
+                "em_push_mutable_content": true,
+                "extern": {
+                    "media-url": "https://github.com/CarlsonYuan.png"
+                }
+            }
+        }
+      }
+      ```
+    
+    2. With [the Chat SDK](https://github.com/CarlsonYuan/agora-chat-sample-ios/blob/2fcbf79474af44b636b91b792c9942ff08b412dd/Modules/CommonModule/Sources/UseCase/Group/GroupUserMessageUseCase.swift#L40)
+       
+       Example: 
+       ```swift
+        let body = AgoraChatTextMessageBody.init(text: TEXT)
+        let message = AgoraChatMessage.init(conversationID: CONVERSATION_ID, body: body, ext: nil)
+        message.chatType = CONVERSATION_TYPE
+        
+        var messageExt = [String: Any]()
+        messageExt["em_apns_ext"] = [
+            "em_push_mutable_content": true,
+            "extern": ["media-url": "https://github.com/CarlsonYuan.png"]
+        ]
+        message.ext = messageExt
+        
+        AgoraChatClient.shared().chatManager?.send(message, progress: nil, completion: { message, error in
+            guard error == nil else {
+                // Handle error.
+                return
+            }
+        })
+       ```
+       
+
 ---
 
 ## Change Push Notification Content Display
