@@ -28,6 +28,7 @@ open class GroupUserMessageUseCase {
         let message = AgoraChatMessage.init(conversationID: group.groupId, body: body, ext: nil)
         message.chatType = .groupChat
         var messageExt = [String: Any]()
+        
         // uncommit to set push template
 //        let emPushTemplate: [String: Any] = [
 //            "name": "tmp1",
@@ -35,6 +36,13 @@ open class GroupUserMessageUseCase {
 //            "content_args": ["contentArg1"]
 //        ]
 //        messageExt["em_push_template"] = emPushTemplate
+        
+        // uncommit to set push rich media
+//        messageExt["em_apns_ext"] = [
+//            "em_push_mutable_content": true,
+//            "extern": ["media-url": "https://github.com/CarlsonYuan.png"]
+//        ]
+        
         message.ext = messageExt
         AgoraChatClient.shared().chatManager?.send(message, progress: nil, completion: { message, error in
             if let error = error {
